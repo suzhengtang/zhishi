@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>只读不写</title>
+</head>
+<body>
+
+<!--苹果端用1.2，之后解决不了readonly失效问题（点击的时候会有光标出现）（且不方便用disabled得时候），就用3-->
+<!--1-->
+$('#id').focus(function(){
+	document.activeElement.blur();
+});
+<!--2-->
+onselectstart = "return false;"
+<!--3-->
+-webkit-user-select:none;
+<!--苹果端用1.4，解决不了弹出输入框问题的时候用5-->
+<!--4-->
+ime-mode:disabled;
+<!--5-->
+-webkit-touch-callout:none;
+
+</body>
+</html>
