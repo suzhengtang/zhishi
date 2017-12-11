@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>上传图片</title>
+	<style>
+		.all{
+			width: 180px;
+			height: 180px;
+			position: relative;
+		}
+		.box{
+			width: 180px;
+			height: 180px;
+			border: 1px solid #ccc;
+			overflow: hidden;
+		}
+		.box img{
+			width: 100%;
+			cursor: pointer;
+		}
+		input{
+			position: absolute;
+			left: 0;
+			top: 0;
+			width: 100%;
+			height: 100%;
+			opacity: 0;
+		}
+	</style>
+</head>
+<body>
+<div class="all">
+	<div class="box">
+		<img id="add_face" src="images/ceshi.png" alt="">
+	</div>
+	<input type="file" onchange="previewImg(this,$('#add_face'))">
+</div>
+
+<script SRC="jquery-3.1.1.min.js"></script>
+<!--上传头像部分-->
+<script>
+	//图片预览
+	function previewImg(imgFile,obj){
+		//console.log(imgFile);//这里打印出是整个input标签
+		var extension = imgFile.value.substring(imgFile.value.lastIndexOf("."),imgFile.value.length);//扩展名
+		extension = extension.toLowerCase();//把文件扩展名转换为小写
+		if ((extension!='.jpg')&&(extension!='.gif')&&(extension!='.jpeg')&&(extension!='.png')&&(extension!='.bmp')){
+//			layer.msg("对不起，系统仅支持标准格式的照片，请您调整格式后重新上传，谢谢 !");
+			alert("对不起，系统仅支持标准格式的照片，请您调整格式后重新上传，谢谢 !");
+			//$(".btn-uploading").focus();//将焦点定位在文件上传的按钮上，可以直接按确定键再次触发
+		}else{
+			var path;//预览地址
+			if(document.all){//IE
+				imgFile.select();
+				path = document.selection.createRange().text;
+			}else{//火狐，谷歌
+				path = window.URL.createObjectURL(imgFile.files[0]);
+			}
+			obj.attr("src",path);//设置预览地址
+			uploadImg(imgFile);
+		}
+	}
+	//开始上传
+	function uploadImg(imgFile){
+		//获取图片文件
+		var file = imgFile.files[0];//文件对象
+		var name = file.name;//图片名
+		//var size = file.size;//图片大小
+		//var type = file.type;//文件类型
+
+		//检测浏览器对FileReader的支持
+		if(window.FileReader) {
+			var reader = new FileReader();
+			reader.onload = function(){//异步方法,文件读取成功完成时触发
+				var dataImg = reader.result;//文件一旦开始读取，无论成功或失败，实例的 result 属性都会被填充。如果读取失败，则 result 的值为 null ，否则即是读取的结果
+				syncUpload(name,dataImg);
+			};
+			reader.readAsDataURL(file);//将文件读取为 DataURL
+		}else {
+//			layer.msg("浏览器不支持H5的FileReader!");
+			alert("浏览器不支持H5的FileReader!");
+		}
+	}
+
+	function syncUpload(name,dataImg){
+		$.ajax({
+			url: "后台地址",
+			data: {
+				upload_type: 'base64',
+				image_type: 'header_img',
+				image_input_title: name,
+				image: dataImg
+			},
+			type: "post",
+			dataType: "json",
+			success: function(data){
+				console.log(data);
+				if(data.state == 'ok'){
+					document.getElementById("upload").value = "";//重置文件域
+//					layer.msg(data.msg);
+					console.log(data.msg);
+				}else if(data.state == 'error'){
+//					layer.msg(data.msg);
+					console.log(data.msg);
+				}
+			},
+			error: function (err) {
+				console.log(err);
+			}
+		});
+	}
+</script>
+</body>
+</html>
