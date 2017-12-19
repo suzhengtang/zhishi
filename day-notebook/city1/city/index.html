@@ -1,0 +1,457 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta http-equiv="Content-Type" content="text/html;charset=utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+	<meta name="apple-mobile-web-app-capable" content="yes">
+	<meta name="apple-mobile-web-app-status-bar-style" content="black">
+	<meta name="format-detection" content="telephone=no">
+	<title>Title</title>
+	<script src="vue.min.js"></script>
+	<script src="mui.min.js"></script>
+	<script src="address.js"></script>
+	<link rel="stylesheet" href="mui.min.css"/>
+	
+	<style>
+		body, div, dl, dt, dd, ul, li, form, input, button, h1, h2, h3, h4, h5, h6, p {
+			margin: 0 auto;
+			padding: 0;
+			font-family: "微软雅黑";
+			color: #00C7C7
+		}
+
+		ul, li, dl, dt, dd {
+			display: block;
+			list-style: none;
+		}
+
+		a {
+			text-decoration: none;
+			outline: none;
+		}
+
+		.fl {
+			float: left;
+		}
+
+		.fr {
+			float: right;
+		}
+
+		.none {
+			display: none;
+		}
+
+		.loan_jm1 {
+			width: 94%;
+			margin: 0 auto;
+		}
+
+		.loan_jm_spa1 {
+			width: 39%;
+			height: 40px;
+			line-height: 40px;
+			font-size: 1em;
+			color: #666;
+			display: block;
+			float: left;
+		}
+
+		.loan_jm_l1 {
+			margin-top: 10px;
+			margin-bottom: 15px;
+			height: 40px;
+		}
+
+		.wbk_srn {
+			width: 57%;
+			height: 40px;
+			border: 1px solid #ccc;
+			background: #FFF;
+			float: left;
+			padding-left: 3%;
+			line-height: 40px;
+			color: #ADADAD;
+			font-size: 1.1em;
+			background-size: 45%;
+			background-position: center;
+			background: #fff;
+		}
+
+		.wbk_srn b {
+			width: 30px;
+			height: 40px;
+			border: 1px solid #ccc;
+			background: #FFF;
+			float: left;
+			padding-left: 3%;
+			line-height: 40px;
+			color: #ADADAD;
+			font-size: 1.1em;
+		}
+
+		/*显示点击是哪个字母*/
+
+		.showLetter {
+			position: fixed;
+			color: #00C7C7;
+			width: 60px;
+			height: 60px;
+			margin-left: -30px;
+			margin-top: -30px;
+			top: 50%;
+			left: 50%;
+			border-radius: 50%;
+			border: #00C7C7 1px solid;
+			text-align: center;
+		}
+
+		.showLetter span {
+			width: 60px;
+			height: 60px;
+			line-height: 60px;
+			font-size: 36px;
+		}
+
+		/*城市弹层*/
+
+		.container {
+			padding: 0 0px;
+		}
+
+		.letter {
+			width: auto;
+			position: fixed;
+			top: 10%;
+			right: 0px;
+			text-align: center;
+		}
+
+		.letter ul {
+			list-style-type: none;
+		}
+
+		.letter ul li {
+			text-decoration: none;
+			color: inherit;
+			padding: 0 10px;
+			font-size: 16px
+		}
+
+		.city {
+			overflow: hidden;
+			padding: 40px 20px 20px;
+		}
+
+		.city-list {
+			width: 100%;
+		}
+
+		.city-list .city-letter {
+			font-size: 20px;
+			display: inline-block;
+			padding-top: 15px;
+			padding-bottom: 5px;
+			border-bottom: 1px solid #e8ecf1;
+			width: 100%;
+		}
+
+		.city-list p {
+			color: #666;
+			height: 50px;
+			line-height: 50px;
+			border-bottom: 1px solid #e8ecf1;
+		}
+
+		.city-list p:active {
+			/*color:#00C7C7;*/
+			background: #d3fcff;
+		}
+
+		.UISelect {
+			margin-top: 5px
+		}
+
+		.slide-fade-enter-active {
+			transition: all .1s ease;
+		}
+
+		.slide-fade-leave-active {
+			transition: all .3s ease;
+		}
+
+		.slide-fade-enter,
+		.slide-fade-leave-to {
+			opacity: 0;
+		}
+
+		.search-top {
+			position: fixed;
+			z-index: 100;
+			width: 100%;
+			top: 45px;
+			padding: 0px 10px;
+			background: rgba(239, 239, 244, .8);
+		}
+
+		.search-content {
+			padding: 0px 20px 20px;
+			position: fixed;
+			z-index: 99;
+			top: 45px;
+			left: 0;
+			right: 0;
+			bottom: 0;
+			background: #fff;
+			overflow-y: auto;
+		}
+
+		.mui-input-row.mui-search .mui-input-clear {
+			margin-bottom: 7px !important
+		}
+
+		.mui-placeholder {
+			margin-top: 5px;
+		}
+
+		.mui-search.mui-active:before {
+			line-height: 30px;
+		}
+	</style>
+</head>
+
+<body>
+
+<div id="app">
+	<header class="page-header" style="">
+		<i class="header-left icon-func bbc-icon bbc-icon-back" @click="close"></i>
+		<div class="header-title" style="color: #000">
+			<div class="mui-input-row mui-search">
+				<input type="search" class="mui-input-clear" placeholder="城市/城市首字母" @input="doSearch" @click="doSearch">
+			</div>
+		</div>
+	</header>
+
+	<!--显示点击的是哪一个字母-->
+	<transition name="slide-fade">
+		<div id="showLetter" class="showLetter" v-show="showLetter"><span v-text="current_initial"></span></div>
+	</transition>
+	<!--城市索引查询-->
+	<div class="letter">
+		<ul>
+			<li v-for="(item,index) of initial" @touchstart.stop="selectInitial">{{item.initial}}</li>
+		</ul>
+	</div>
+	<!--城市列表-->
+	<div class="container">
+		<div class="city">
+			<div class="city-list">
+				<p @click="selectCity">不限</p>
+			</div>
+			<div class="city-list" v-for="item of initial">
+
+				<span class="city-letter" v-gettop="_self">{{item.initial}}</span>
+				<p v-for="city of item.city" @click="selectCity">{{city.value}}</p>
+			</div>
+		</div>
+	</div>
+	<div class="search-content" v-show="showSearch" @touchstart.stop="stop">
+		<div class="city-list" v-if="serachData.length">
+			<p @click="selectCity" v-for="item of serachData">{{item.value}}</p>
+		</div>
+		<div v-else>没有找到该城市！</div>
+	</div>
+</div>
+</body>
+
+</html>
+<script>
+	var vm = new Vue({
+		el: '#app',
+		data: {
+			current_initial: 'A',
+			scrollTop: 0,
+			original_citys: address.citys, //原始城市数据
+			original_provinces: address.provinces, //原始省份数据
+			letter_key_data: null, //以字母分组的对象
+			letter_scroll: [], //字母对应位置数组
+			showLetter: false, //是否显示中间提示
+			serachData: [], //搜索结果
+			showSearch: false, //显示搜索结果
+			setTime: 0,
+		},
+		computed: {
+			initial: function () {
+				var that = this;
+				var lett = Object.keys(this.letter_key_data)
+				var lett = lett.sort(function (val, val2) {
+					return val.charCodeAt(0) > val2.charCodeAt(0) ? 1 : -1;
+				}).map(function (val) {
+					return {
+						initial: val,
+						city: that.letter_key_data[val]
+					}
+				})
+				return lett;
+			},
+		},
+		created: function () {
+			var initial = {};
+			this.original_citys.forEach(function (val) {
+				if (!initial[val.firstLetter]) {
+					initial[val.firstLetter] = [];
+				}
+				initial[val.firstLetter].push(val)
+			});
+			this.letter_key_data = initial;
+		},
+
+		methods: {
+			stop: function (e) {
+				e.stopPropagation()
+			},
+			selectInitial: function (e) {
+				e.stopPropagation()
+				e.preventDefault()
+				this.current_initial = e.target.innerText;
+				this.letter_scroll.some(function (val) {
+					if (val.letter === this.current_initial) {
+						window.scrollTo(0, val.top - 59);
+						return true;
+					}
+					return false;
+				});
+			},
+
+			//选择城市
+			selectCity: function (e) {
+				var value = e.target.innerText
+				if (e.target.innerText === '不限') {
+					value = ''
+				}
+				if (this.showSearch) {
+					this.showSearch = false;
+				}
+				mui.fire(mui.currentWebview.opener(), "menu:select", {"city": value});
+
+			},
+			//显示当前选择的大字母
+			showCurrent: function () {
+				this.showLetter = true;
+				clearTimeout(this.setTime)
+				var that = this;
+				this.setTime = setTimeout(function () {
+					that.showLetter = false;
+				}, 1400);
+			},
+			//关闭页面
+			close: function () {
+				mui.fire(mui.currentWebview.opener(), "menu:close");
+			},
+			//开始搜索
+			doSearch: function (e) {
+				if (e.target.value) {
+					this.showSearch = true;
+				} else {
+					this.showSearch = false;
+					this.serachData = [];
+					return;
+				}
+
+				//转为大写
+				var value = e.target.value.toUpperCase();
+				var firstCode = value.charCodeAt(0);
+				var serachData = [];
+
+				if (firstCode >= 97 && firstCode <= 122 || firstCode >= 65 && firstCode <= 90) {
+					//城市拼音搜索
+					this.original_citys.forEach(function (val) {
+						if (val.firstPY.indexOf(value) === 0 || val.allPY.toUpperCase().indexOf(value) === 0) {
+							serachData.push(val);
+						}
+					});
+
+				} else if (firstCode >= 122) {
+					//城市汉字搜索
+					this.original_citys.forEach(function (val) {
+						if (val.value.indexOf(value) === 0) {
+							serachData.push(val);
+						}
+					})
+				}
+
+				//城市的没找到，尝试找省的
+				var that = this;
+				if (serachData.length === 0 && (firstCode >= 97 && firstCode <= 122 || firstCode >= 65 && firstCode <= 90)) {
+					that.original_provinces.forEach(function (val) {
+						if (val.value.indexOf(value) === 0) {
+							that.original_citys.forEach(function (val2) {
+								if (val.id === val2.parentId) {
+									serachData.push(val2);
+								}
+							})
+						}
+					})
+				} else if (serachData.length === 0 && firstCode >= 97) {
+
+					this.original_provinces.forEach(function (val) {
+						if (val.firstPY.indexOf(value) === 0 || val.allPY.toUpperCase().indexOf(value) === 0) {
+							that.original_citys.forEach(function (val2) {
+								if (val.id === val2.parentId) {
+									serachData.push(val2);
+								}
+							})
+						}
+					})
+				}
+				this.serachData = serachData
+			},
+			scroll: function (e) {
+
+				this.scrollTop = e.target.body.scrollTop;
+
+				if (this.scrollTop < this.letter_scroll[0].top - 59) {
+					this.current_initial = this.letter_scroll[0].letter;
+				} else if (this.scrollTop > this.letter_scroll[this.letter_scroll.length - 1].top - 59) {
+					this.current_initial = this.letter_scroll[this.letter_scroll.length - 1].letter;
+				} else {
+					for (var i = 0; i < this.letter_scroll.length; i++) {
+						if (this.scrollTop > this.letter_scroll[i].top - 59 && this.scrollTop < this.letter_scroll[i + 1].top - 59) {
+							this.current_initial = this.letter_scroll[i].letter;
+						}
+					}
+				}
+
+				this.showCurrent();
+			}
+		},
+		directives: {
+			gettop: {
+				// 指令的定义
+				inserted: function (el, binding) {
+					var self = binding.value
+					self.letter_scroll.push({
+						letter: el.innerText,
+						top: el.offsetTop
+					})
+				}
+			}
+		}
+	});
+
+	//滚动监听
+	document.onscroll = vm.scroll;
+
+	/**
+	 * 关闭侧滑菜单
+	 */
+	function close() {
+		mui.fire(mui.currentWebview.opener(), "menu:close");
+	}
+
+
+	mui.back = function () {
+		mui.fire(mui.currentWebview.opener(), "menu:close");
+	}
+</script>
