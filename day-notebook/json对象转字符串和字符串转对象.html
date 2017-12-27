@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Title</title>
+</head>
+<body>
+<script>
+	//json对象转json字符串   方法：js方法：var jsonStr1 = JSON.stringify(jsonObj)；
+	//json字符串转json对象   方法：js方法： var jsonObj = JSON.parse(jsonStr)   jquery的方法：var jsonObj = $.parseJSON(jsonStr)；
+
+	var jsonStr = '[{"id":"01","open":false,"pId":"0","name":"A部门"},{"id":"01","open":false,"pId":"0","name":"A部门"},{"id":"011","open":false,"pId":"01","name":"A部门"},{"id":"03","open":false,"pId":"0","name":"A部门"},{"id":"04","open":false,"pId":"0","name":"A部门"}, {"id":"05","open":false,"pId":"0","name":"A部门"}, {"id":"06","open":false,"pId":"0","name":"A部门"}]';
+	//  var jsonObj = $.parseJSON(jsonStr);
+	var jsonObj =  JSON.parse(jsonStr)
+	console.log(jsonObj)
+
+	var jsonStr1 = JSON.stringify(jsonObj)
+	console.log(jsonStr1+"jsonStr1")
+	var jsonArr = [];
+	for(var i =0 ;i < jsonObj.length;i++){
+		jsonArr[i] = jsonObj[i];
+	}
+	console.log(typeof(jsonArr))
+
+
+</script>
+</body>
+</html>

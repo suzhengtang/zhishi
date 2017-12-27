@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>字符串转json对象</title>
+</head>
+<body>
+<script>
+	function toJSON(payload) {
+		var json = {};
+		//字符串转json对象
+		var arr = payload.toString().split('&').map(function (val) {
+			return val.split('=')
+		})
+		arr.forEach(function (val) {
+			if(val[0] !== 'id'){
+				json[val[0]] = ~~val[1];
+			}else{
+				json[val[0]] = val[1];
+			}
+		})
+		return json;
+	}
+
+</script>
+</body>
+</html>
