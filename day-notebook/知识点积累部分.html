@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Title</title>
+</head>
+<body>
+<!--向上向下取整（或几位小数）-->
+<script>
+	var num = 22.13758;
+	console.log(Math.floor(num*100)/100);
+	console.log(Math.ceil(num*100)/100);
+	console.log(Math.round(num*100)/100);
+	console.log(num.toFixed(2));
+//	输出： 22.13
+//	      22.14
+//	      22.14
+//	      22.14
+
+//1.substr(使用很麻烦)
+	var str = "Hello world!";
+	document.write(str.substr(3));
+	//输出：lo world!
+
+	var str = "Hello world!";
+	document.write(str.substr(3,7));
+	//输出：lo worl
+
+//2.toFixed(四舍五入)
+	var num = new Number(12.38);
+    document.write(num.toFixed(1));
+	//输出：12.4
+
+//3.floor(向下取整)
+	Math.floor(0.60);   //结果：0
+	Math.floor(0.40);        //0
+	Math.floor(5);           //5
+	Math.floor(5.1);         //5
+	Math.floor(-5.1);        //-6
+	Math.floor(-5.9);        //-6
+
+//4.round(四舍五入)
+	Math.round(0.60);   //结果：1
+	Math.round(0.40);         //0
+	Math.round(5);            //5
+	Math.round(5.1);          //5
+	Math.round(-5.1);         //-5
+	Math.round(-5.9);         //-6
+</script>
+
+<!--截取字符串的方法-->
+<script>
+//删除字符串最后几个字符的几种方法
+	var str = "nihao=wo";
+	var str1 = str.substring(0,str.length-2);
+	var str2 = str.substring(0,str.length-1);
+	console.log(str1);  //nihao=
+	console.log(str2);  //nihao=w
+
+//利用字符分割字符串
+	var str3 = str.split("=");
+	console.log(str3); //["nihao","wo"]
+</script>
+
+</body>
+</html>
