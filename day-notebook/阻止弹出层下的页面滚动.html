@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Title</title>
+</head>
+<body>
+
+
+<script>
+//	添加阻止事件
+	$(document).get(0).addEventListener('touchmove', removeWheelEvent, false);
+	document.getElementById('overflow_auto').addEventListener('touchmove', enAbleScroll, false);
+
+//	取消阻止事件
+	$(document).get(0).addEventListener('touchmove', removeWheelEvent, false);
+	document.getElementById('overflow_auto').addEventListener('touchmove', enAbleScroll, false);
+
+	function enAbleScroll(e) {
+		e.stopPropagation();
+		e.cancelBubble = false;
+		var obj = $('#overflow_auto');
+		var delta = 0;
+
+		if (e.wheelDelta) {
+			delta = e.wheelDelta/120;
+		} else if (e.detail) {
+			delta = -e.detail/3;
+		}
+		var heightHe = $(obj).innerHeight() + $(obj).scrollTop() + 1.5;
+		if(heightHe >= document.getElementById('overflow_auto').scrollHeight) {
+			if(delta < 0) {
+				//向下滑动
+				e.preventDefault();
+				return false;
+			}
+		}
+		if($(obj).scrollTop() === 0) {
+			if(delta > 0) {
+				//向上滑动
+				e.preventDefault();
+				return false;
+			}
+		}
+		return false;
+	}
+	function removeWheelEvent (e) {
+		e.stopPropagation();
+		e.preventDefault();
+		e.cancelBubble = false;
+		return false;
+	}
+</script>
+</body>
+</html>

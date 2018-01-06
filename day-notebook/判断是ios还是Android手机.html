@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Title</title>
+</head>
+<body>
+
+
+<script>
+	var u = navigator.userAgent;
+	var isAndroid = u.indexOf('Android') > -1 || u.indexOf('Adr') > -1; //android终端
+	var isiOS = !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/); //ios终端
+	if(isAndroid){  //是安卓手机需要执行的内容
+		var header = $('.co-sticky');
+		var origOffsetY = header.offset().top;
+		function onScroll(e) {
+			($(document).scrollTop())-40 >= origOffsetY ? header.addClass("addclass") : header.removeClass("addclass");
+		}
+		document.addEventListener('scroll', onScroll);
+	}
+</script>
+</body>
+</html>
