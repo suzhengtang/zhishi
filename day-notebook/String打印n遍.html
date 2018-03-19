@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Title</title>
+</head>
+<body>
+<script>
+	String.prototype.repeatify = function (n) {
+		var str = '';
+		for (var i = 0; i < n; i++) {
+			str += this;
+		}
+		return str;
+	}
+	console.log('hello'.repeatify(3));
+
+	var fullname = 'aaa';
+	var obj = {
+		fullname: 'bbb',
+		prop: {
+			fullname: 'ccc',
+			getFullname: function(){
+				return this.fullname;
+			}
+		}
+	}
+	console.log(obj.prop.getFullname());
+	var text = obj.prop.getFullname;
+	console.log(text());   //怎么让这里也打印出ccc呢？
+
+	function List() {
+		this.length = 0;
+		this.add = function (arg) {
+			this.length += arg.length;
+		}
+	}
+</script>
+</body>
+</html>
