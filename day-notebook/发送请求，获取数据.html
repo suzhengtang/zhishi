@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>ajax请求后台数据</title>
+</head>
+<body>
+
+<script src="jquery-3.1.1.min.js"></script>
+<script>
+	$.ajax({
+		type: 'POST',
+		url: 'data.json',
+		data: {},
+		dataType: 'json',
+		success: function (res) {
+			console.log(res);
+		}
+	})
+</script>
+</body>
+</html>
